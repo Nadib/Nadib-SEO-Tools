@@ -15,6 +15,7 @@ if (isset($argv[1]) === false) {
     throw new \Exception('SEOMuggler Missing argument 1.');
 }
 
+
 $smuggler = Smuggler::get($argv[1]);
 $ressources = $smuggler->analyse();
 
