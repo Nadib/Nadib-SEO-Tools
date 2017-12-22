@@ -1,2 +1,1 @@
-# Nadib-SEO-Tools
-Custom SEO tools
+# SEOSmuggler
