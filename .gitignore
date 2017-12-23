@@ -1,2 +1,5 @@
 build/
 src/SEOSmuggler.php
+examples/
+.gitignore
+

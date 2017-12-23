@@ -52,7 +52,7 @@ class Report {
             'type',
             'mimetype',
             'internal',
-            'referers count',
+            'referersCount',
             'error');
     
     /**
