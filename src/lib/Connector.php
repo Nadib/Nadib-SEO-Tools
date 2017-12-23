@@ -35,6 +35,17 @@ class Connector
     }
     
     /**
+     * Close connection properly
+     */
+    public function close()
+    {
+        if($this->curl){
+            curl_close($this->curl);
+            $this->curl = null;
+        }
+    }
+    
+    /**
      * Set HTTP request header element
      * 
      * @param string $name Header element name. 
@@ -79,7 +90,7 @@ class Connector
             $returnDatas['id'] = $this->index;
         }
         
-        if ($success) {            
+        if ($success !== false) {            
             if ($onlyHeader === true) {
                 $returnDatas['statusCode'] = curl_getinfo($this->curl, CURLINFO_HTTP_CODE);
                 $returnDatas['mimetype'] = curl_getinfo($this->curl, CURLINFO_CONTENT_TYPE);
@@ -106,7 +117,7 @@ class Connector
             curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($this->curl, CURLOPT_SSL_VERIFYHOST, false);
             curl_setopt($this->curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36");
-            $cookiefile = '/Users/Busfront-Nomad/desktop/cookies.txt';
+            $cookiefile = sys_get_temp_dir().'/SEOSmugglerCookie.txt';
             curl_setopt( $this->curl, CURLOPT_COOKIESESSION, true );
             curl_setopt( $this->curl, CURLOPT_COOKIEJAR,  $cookiefile );
             curl_setopt( $this->curl, CURLOPT_COOKIEFILE, $cookiefile );

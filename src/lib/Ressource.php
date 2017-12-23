@@ -39,26 +39,26 @@ class Ressource {
         $this->datas = $datas;
         $this->datas['referersCount'] = 0;
         $this->datas['referers'] = [];
-        if ($this->get('statusCode') < 300) {
+        if ($this->get('statusCode') >= 400 || $this->get('error')) {
+            $color = "\033[31m";
+        } elseif ($this->get('statusCode') < 300) {
             $color = "\033[32m";
         } elseif ($this->get('statusCode') < 400) {
             $color = "\033[33m";
-        } else {
-            $color = "\033[31m";
         }
         echo $color.' '.$this->get('id').', '.$this->get('url').', '.$this->get('statusCode').", ".$this->get('ressourceType')." \033[0m ".PHP_EOL;
     }
     
     /**
-     * Get data from ressource
+     * Get attribute value
      * 
-     * @param string $data Data name.
-     * @return mixed Found data or null.
+     * @param string $attribute Attribute name.
+     * @return mixed Found value or null.
      */
-    public function get($data)
+    public function get($attribute)
     {
-        if (isset($this->datas[$data]) === true) {
-            return $this->datas[$data];
+        if (isset($this->datas[$attribute]) === true) {
+            return $this->datas[$attribute];
         }
         return null;
     }
