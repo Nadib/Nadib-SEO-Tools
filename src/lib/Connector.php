@@ -74,9 +74,12 @@ class Connector
         if ($onlyHeader === true) {
             curl_setopt($this->curl, CURLOPT_HEADER, true);
             curl_setopt($this->curl, CURLOPT_NOBODY, true);
+            curl_setopt($this->curl, CURLOPT_FOLLOWLOCATION, false);
+
         } else {
             curl_setopt($this->curl, CURLOPT_HEADER, false);
             curl_setopt($this->curl, CURLOPT_NOBODY, false);
+            curl_setopt($this->curl, CURLOPT_FOLLOWLOCATION, true);
         }
         
         ob_start();
