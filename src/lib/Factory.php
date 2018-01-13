@@ -152,7 +152,6 @@ class Factory
         $DOMDocument->loadHTML($htmlBody);
         
         $analyse = [];
-        
         $htmls = $DOMDocument->getElementsByTagName('html');
         foreach ($htmls as $htm) {
             $analyse['lang'] =  $htm->getAttribute('lang');
@@ -170,14 +169,44 @@ class Factory
         
         $headings = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
         $analyse['headings'] = [];
-        foreach($headings as $heading){
+        foreach ($headings as $heading) {
             $heads = $DOMDocument->getElementsByTagName($heading);
             if ($heads->length > 0) {
                 $analyse['headings'][$heading] = array();
-                foreach($heads as $head){
+                foreach ($heads as $head) {
                     array_push($analyse['headings'][$heading], $head->nodeValue);
                 }
             }
+        }
+        
+        $bodys = $DOMDocument->getElementsByTagName('body');
+        foreach ($bodys as $body) {
+            $analyse['content'] = $body->nodeValue;
+        }
+        
+        $as = $DOMDocument->getElementsByTagName('a');
+        $analyse['links'] = array();
+        foreach ($as as $a) {
+           $curLink = array('href' => $a->getAttribute('href'), 
+                        'anchor' => $a->nodeValue,
+                        'target' => $a->getAttribute('target'),
+                        'title' => $a->getAttribute('title'),
+                        'rel' => $a->getAttribute('rel'));
+           array_push($analyse['links'], $curLink);
+        }
+        
+        $images = $DOMDocument->getElementsByTagName('img');
+        $analyse['images'] = array();
+        foreach ($images as $img) {
+            $curImage = array('src' => $img->getAttribute('src'),
+                'title' => $img->getAttribute('title'),
+                'alt' => $img->getAttribute('alt'),
+                'srcset' => $img->getAttribute('srcset'),
+                'sizes' => $img->getAttribute('sizes'),
+                'width' => $img->getAttribute('width'),
+                'height' => $img->getAttribute('height')
+                );
+            array_push($analyse['images'], $curImage);
         }
         
         return $analyse;
