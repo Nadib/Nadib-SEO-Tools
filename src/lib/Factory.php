@@ -78,6 +78,8 @@ class Factory
             if ($this->options->canFollow() === false && $this->rootURL !== $url) {
                 $follow = false;
             }
+           
+            
             if ($follow) {                
                 $this->parseLinks($this->ressources[$url]);
             }
@@ -162,7 +164,12 @@ class Factory
                         'alt' => $link->getAttribute('alt'),
                         'rel' => $link->getAttribute('rel')
                     ];
-                    $this->getRessource($cleanLink)->addReferer($refererDatas);                    
+                    
+                    if($this->options->canAnalyse($cleanLink)){
+                        $this->getRessource($cleanLink)->addReferer($refererDatas);
+                    }
+                    
+                                        
                 }
             }
         }

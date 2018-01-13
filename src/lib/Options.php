@@ -24,6 +24,9 @@ class Options
     /** @var bool Follow links */
     private $follow = true;
     
+    /** @var array URL(s) to exclude */
+    private $exclusion = [];
+    
     /**
      * Add a report
      * 
@@ -74,6 +77,44 @@ class Options
             return $this->reports[$name];
         }
         return null;
+    }
+    
+    /**
+     * Exclude URL's from analysis.
+     * Joker * allowed at start and end of string
+     * @param string $pattern URL(s) to exclude.
+     */
+    public function excludeURL(string $pattern)
+    {
+        array_push($this->exclusion, $pattern);
+    }
+    
+    /**
+     * Test if an url can be annalysed
+     * 
+     * @param string $url
+     * @return bool
+     */
+    public function canAnalyse(string $url) 
+    {
+        
+        foreach ($this->exclusion as $exclusion) {
+            // Start joker
+            if (substr($exclusion, 0, 1)) {
+            
+            }
+            
+            if($url === $exclusion){
+                return false;
+            }
+            // End Joker
+            if (substr($exclusion, -1, 1)) {
+                if(substr($url, 0, strlen($exclusion)-1) === substr($exclusion, 0, strlen($exclusion)-1)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
     
     /**
