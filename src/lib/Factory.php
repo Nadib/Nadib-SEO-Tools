@@ -131,6 +131,7 @@ class Factory
                 if ($pos !== false) {
                     if ($k === 'html' && $datas['internal'] === true) {
                         $datas['body'] = $this->connector->get($datas['url']);
+                        $datas['content'] = $this->analysePageContent($datas['body']);
                     }
                     $datas['type'] = $v;
                     break;
@@ -138,6 +139,48 @@ class Factory
             }
         }
         return new Ressource($datas);
+    }
+    
+    /**
+     * Analyse page content.
+     * @param string $htmlBody
+     */
+    private function analysePageContent(string $htmlBody)
+    {
+        $DOMDocument = new \DOMDocument();
+        $DOMDocument->strictErrorChecking = FALSE;
+        $DOMDocument->loadHTML($htmlBody);
+        
+        $analyse = [];
+        
+        $htmls = $DOMDocument->getElementsByTagName('html');
+        foreach ($htmls as $htm) {
+            $analyse['lang'] =  $htm->getAttribute('lang');
+        }
+        $titles = $DOMDocument->getElementsByTagName('title');
+        foreach ($titles as $title) {
+            $analyse['title'] = $title->nodeValue;
+        }
+        $metas = $DOMDocument->getElementsByTagName('meta');
+        foreach ($metas as $meta) {
+            if ($meta->getAttribute('name') === 'description') {
+                $analyse['description'] = $meta->nodeValue;
+            }
+        }
+        
+        $headings = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+        $analyse['headings'] = [];
+        foreach($headings as $heading){
+            $heads = $DOMDocument->getElementsByTagName($heading);
+            if ($heads->length > 0) {
+                $analyse['headings'][$heading] = array();
+                foreach($heads as $head){
+                    array_push($analyse['headings'][$heading], $head->nodeValue);
+                }
+            }
+        }
+        
+        return $analyse;
     }
     
     /**
